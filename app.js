@@ -32,7 +32,7 @@ fs.readFile('./smol-list.json', 'utf8' , (err, raw) => {
     return promise
   })
 
-  Promise.all(details) 
+  Promise.allSettled(details) 
     .then(results => {
       console.log("All done");
     })
