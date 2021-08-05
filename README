@@ -1,2 +1,6 @@
-Grab data from https://www.rhra.ca/wp-admin/admin-ajax.php?action=public_register&language=en
+Grab list of facilities from https://www.rhra.ca/wp-admin/admin-ajax.php?action=public_register&language=en
+Save the JSON data as list.json
 
+Run download-pages (probably multiple times) to save a local copy of the pages
+
+When you've got them all, run process-pages to extract the various fields and save to CSV
