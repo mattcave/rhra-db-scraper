@@ -2,7 +2,7 @@ const fs = require('fs')
 const HTMLParser = require('node-html-parser');
 const converter = require('json-2-csv');
 
-const dirname = './pages/'
+const dirname = './data/'
 
 let promises = []
 
@@ -58,7 +58,6 @@ fs.readdir(dirname, (err, files) => {
         })
         promises.push(promise)
 
-
     });
 
     Promise.all(promises)
@@ -67,7 +66,7 @@ fs.readdir(dirname, (err, files) => {
             if (err) {
                 throw err;
             } else {
-                fs.writeFile('./out.csv', `\ufeff${csv}`, err => {
+                fs.writeFile('./out.csv', csv, err => {
                 if (err) {
                     console.error(err)
                     return
@@ -75,7 +74,7 @@ fs.readdir(dirname, (err, files) => {
                 console.log("File written successfully")
                 })
             }
-        }, { emptyFieldValue: "" })
+        }, { emptyFieldValue: "", excelBOM: true })
     })
 });
 
