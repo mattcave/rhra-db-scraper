@@ -21,19 +21,24 @@ fs.readdir(dirname, (err, files) => {
                 facility['Facility Name'] = docroot.querySelector('h2.search-detail').text
                 facility['Licence Status'] = docroot.querySelector('p.licence-status strong').text
     
-                if (docroot.querySelector('p.licence-status strong').text == "Issued") {
-                    facility['Licence Num'] = docroot.querySelector('#collapseOnePR > div > div:nth-child(1) > div.col-sm-7').text.trim();
-                    facility['First Issue Date'] = docroot.querySelector('#collapseOnePR > div > div:nth-child(2) > div.col-sm-7').text.trim();
-                    facility['Licence Conditions'] = docroot.querySelector('#collapseNinePR > div > div > div > p').text.trim();
-                    facility['Licencee Name'] = docroot.querySelector('#collapseOnePR > div > div:nth-child(6) > div.col-sm-7').text.replace(/[\s]+/g, " ").trim();
-                    facility['Licencee Address'] = docroot.querySelector('#collapseOnePR > div > div:nth-child(7) > div.col-sm-7').text.replace(/[\s]+/g, " ").trim();
-                    facility['Licencee Contact'] = docroot.querySelector('#collapseOnePR > div > div:nth-child(8) > div.col-sm-7').text.replace(/[\s]+/g, " ").trim();
+                if (docroot.querySelector('p.licence-status strong').text.startsWith("Issued")) {
+                    facility['Home Address'] = 
+                        docroot.querySelector('h2.search-detail').nextElementSibling.text.replace(/[\s]+/g, " ").trim()
+                        + " " +
+                        docroot.querySelector('h2.search-detail').nextElementSibling.nextElementSibling.text.replace(/[\s]+/g, " ").trim()       
                     facility['Home Contact'] = docroot.querySelector('#collapseOnePR > div > div:nth-child(10) > div.col-sm-7').text.replace(/[\s]+/g, " ").trim();
                     facility['Home Phone'] = docroot.querySelector('#collapseOnePR > div > div:nth-child(11) > div.col-sm-7').text.replace(/[\s]+/g, " ").trim();
                     facility['Home Fax'] = docroot.querySelector('#collapseOnePR > div > div:nth-child(12) > div.col-sm-7').text.replace(/[\s]+/g, " ").trim();
                     facility['Home Website'] = docroot.querySelector('#collapseOnePR > div > div:nth-child(13) > div.col-sm-7').text.replace(/[\s]+/g, " ").trim();
                     facility['Home Email'] = docroot.querySelector('#collapseOnePR > div > div:nth-child(14) > div.col-sm-7').text.replace(/[\s]+/g, " ").trim();
-    
+                    
+                    facility['Licence Num'] = docroot.querySelector('#collapseOnePR > div > div:nth-child(1) > div.col-sm-7').text.trim();
+                    facility['First Issue Date'] = docroot.querySelector('#collapseOnePR > div > div:nth-child(2) > div.col-sm-7').text.trim();
+                    // facility['Licence Conditions'] = docroot.querySelector('#collapseNinePR > div > div > div > p').text.trim();
+                    facility['Licencee Name'] = docroot.querySelector('#collapseOnePR > div > div:nth-child(6) > div.col-sm-7').text.replace(/[\s]+/g, " ").trim();
+                    facility['Licencee Address'] = docroot.querySelector('#collapseOnePR > div > div:nth-child(7) > div.col-sm-7').text.replace(/[\s]+/g, " ").trim();
+                    facility['Licencee Contact'] = docroot.querySelector('#collapseOnePR > div > div:nth-child(8) > div.col-sm-7').text.replace(/[\s]+/g, " ").trim();
+
                     facility['Number of Suites'] = docroot.querySelector('#collapseFivePR > div > div:nth-child(2) > div.col-sm-7').text.replace(/[\s]+/g, " ").trim();
                     facility['Resident Capacity'] = docroot.querySelector('#collapseFivePR > div > div:nth-child(3) > div.col-sm-7').text.replace(/[\s]+/g, " ").trim();
                     facility['Has Automatic Sprinklers'] = docroot.querySelector('#collapseFivePR > div > div:nth-child(4) > div.col-sm-7').text.replace(/[\s]+/g, " ").trim();
