@@ -9,8 +9,8 @@ Run `npm install`
 * Grab list of Homes from https://www.rhra.ca/wp-admin/admin-ajax.php?action=public_register&language=en
 * Save the JSON data as list.json
 * Delete any old files from the data directory
-* Run download-pages (usually multiple times) to save a local copy of the pages
-* When you've got them all, run process-pages to extract the various fields and save to CSV
+* Run `node download-pages.s` (usually multiple times) to save a local copy of the pages
+* When you've got them all, run `node process-pages.s` to extract the various fields and save to CSV
 * The file will be saved to out.csv
 
 ## TODO
