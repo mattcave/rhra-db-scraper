@@ -2,17 +2,24 @@ const fs = require('fs')
 const HTMLParser = require('node-html-parser');
 const converter = require('json-2-csv');
 
-const dirname = './data/'
+const appconfig = require('dotenv').config()
+
+if (appconfig.error) {
+    console.log("No config file, using defaults")
+}
+
+const dataDir = process.env.dataDir || './data'
+const csvFile = process.env.csvFile || './out.csv'
 
 let promises = []
 
-fs.readdir(dirname, (err, files) => {    
+fs.readdir(datadir, (err, files) => {    
 
     files.forEach(filename => {
         
         const promise = new Promise(resolve => {
 
-            fs.readFile(dirname + filename, { encoding: 'UTF-8' }, (err, doc) => {
+            fs.readFile(datadir + filename, { encoding: 'UTF-8' }, (err, doc) => {
                 if (err) throw err;
                 const docroot = HTMLParser.parse(doc);
     

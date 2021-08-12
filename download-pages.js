@@ -1,6 +1,17 @@
 
 const fs = require('fs')
-const fetch = require('node-fetch');
+const fetch = require('node-fetch')
+
+const appconfig = require('dotenv').config()
+
+if (appconfig.error) {
+    console.log("No config file, using defaults")
+}
+
+const dataDir = process.env.dataDir || './data'
+const batchSize = Number(process.env.batchSize) || 200
+const requestInterval = Number(process.env.requestInterval) || 2000
+const requestTimeout = Number(process.env.requestTimeout) || 10000
 
 let readFileAsync = function (filename) {
     return new Promise(function (resolve, reject) {
@@ -10,7 +21,6 @@ let readFileAsync = function (filename) {
         })
     })
 }
-
 
 console.log(`Reading list of homes from list.json`)
 readFileAsync('./list.json', 'UTF-8')
@@ -31,7 +41,7 @@ readFileAsync('./list.json', 'UTF-8')
         // console.log(data)
         console.log(`Total homes in database: ${idList.length}`)
         return idList.filter(id => {
-            const path = `./pages/${id}.html`
+            const path = `./${dataDir}/${id}.html`
             return !fs.existsSync(path)
         })
     })
@@ -41,26 +51,24 @@ readFileAsync('./list.json', 'UTF-8')
     })
     .then(filteredIdList => {
         let delay = 0;
-        for (let i = 0; i < 200 && i < filteredIdList.length; i++) {
-            const delayIncrement = 2000;
+        for (let i = 0; i < batchSize && i < filteredIdList.length; i++) {
             // console.log(`Getting ${filteredIdList[i]} with delay ${delay}`)
             setTimeout(getPage, delay, filteredIdList[i])
-            delay += delayIncrement;
+            delay += requestInterval;
         }
     })
     .catch(err => {
-        console.error(err)
+        // console.error(err)
     })
 
 function getPage(id) {
-    fetch(`http://www.rhra.ca/en/register/homeid/${id}/`, { timeout: 10000 })
+    fetch(`http://www.rhra.ca/en/register/homeid/${id}/`, { timeout: requestTimeout })
         .then(checkStatus)
         .then(res => res.text())
         .then(body => {
-            process.stdout.write(".");
             // console.log(id)
             // console.log(body)
-            fs.writeFile(`./pages/${id}.html`, body, err => {
+            fs.writeFile(`./${dataDir}/${id}.html`, body, err => {
                 if (err) {
                     console.error(err)
                     return
@@ -69,7 +77,8 @@ function getPage(id) {
             // console.log("File written successfully")
         })
         .catch(err => {
-            console.err (err)
+            process.stdout.write("x");
+            // console.error (err)
             // console.log(`Couldn't get page`)
         })
 }
@@ -86,7 +95,7 @@ function checkStatus(res) {
             process.stdout.write("5");
             throw new Error(res.statusText)
         default:
-            process.stdout.write("X");
+            process.stdout.write("x");
             throw new Error(res.statusText)
     }
 }

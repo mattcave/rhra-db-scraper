@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^10.0.0",
     "json-2-csv": "^3.14.1",
     "node-fetch": "^2.6.1",
     "node-html-parser": "^4.1.2"
