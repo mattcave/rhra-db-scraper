@@ -13,13 +13,15 @@ const csvFile = process.env.csvFile || './out.csv'
 
 let promises = []
 
-fs.readdir(datadir, (err, files) => {    
+fs.readdir(dataDir, (err, files) => {    
+    if (err)
+        throw err;
 
     files.forEach(filename => {
         
         const promise = new Promise(resolve => {
 
-            fs.readFile(datadir + filename, { encoding: 'UTF-8' }, (err, doc) => {
+            fs.readFile(dataDir + "/" + filename, { encoding: 'UTF-8' }, (err, doc) => {
                 if (err) throw err;
                 const docroot = HTMLParser.parse(doc);
     
@@ -78,12 +80,12 @@ fs.readdir(datadir, (err, files) => {
             if (err) {
                 throw err;
             } else {
-                fs.writeFile('./out.csv', csv, err => {
+                fs.writeFile(csvFile, csv, err => {
                 if (err) {
                     console.error(err)
                     return
                 }
-                console.log("File written successfully")
+                console.log(`CSV file written to ${csvFile}`)
                 })
             }
         }, { emptyFieldValue: "", excelBOM: true })
