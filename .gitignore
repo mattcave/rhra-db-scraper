@@ -3,3 +3,5 @@ data
 *.csv
 package-lock.json
 .DS_Store
+.env
+list.json
