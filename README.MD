@@ -2,7 +2,9 @@
 
 ## Setup
 Copy these files into a directory on your computer
-Install node
+
+Install node from https://nodejs.org/en/download/
+
 Run `npm install`
 
 ## Process
