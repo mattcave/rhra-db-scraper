@@ -18,7 +18,11 @@ fs.readdir(dataDir, (err, files) => {
         throw err;
 
     files.forEach(filename => {
-        
+        // Skip non-HTML files
+        if (!/.html$/.test(filename)) {
+            console.log(`Skipping ${filename}`)
+            return
+        }
         const promise = new Promise(resolve => {
 
             fs.readFile(dataDir + "/" + filename, { encoding: 'UTF-8' }, (err, doc) => {
@@ -26,7 +30,7 @@ fs.readdir(dataDir, (err, files) => {
                 const docroot = HTMLParser.parse(doc);
     
                 let facility = {};
-    
+                
                 facility['Facility Name'] = docroot.querySelector('h2.search-detail').text
                 facility['Licence Status'] = docroot.querySelector('p.licence-status strong').text
     
