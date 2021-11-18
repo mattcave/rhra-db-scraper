@@ -28,7 +28,6 @@ readFileAsync('./list.json', 'UTF-8')
         return (JSON.parse(content).result.entries)
     })
     .catch(err => {
-        // console.log("No list.json found - downloading a fresh copy")
         throw new Error(`Cannot open file = ${err.message}`)
     })
     .then(data => {
@@ -46,6 +45,10 @@ readFileAsync('./list.json', 'UTF-8')
         })
     })
     .then(filteredIdList => {
+        if (filteredIdList.length === 0) {
+            console.log("Nothing to do")
+            throw new Error("Nothing to do");
+        }
         console.log(`Homes still to retrieve: ${filteredIdList.length}`)
         return (filteredIdList)
     })
