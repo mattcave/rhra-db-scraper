@@ -18,7 +18,9 @@ const listFile = Number(process.env.listFile) || './list.json'
 
 
 console.log(`Reading list of homes from ${listFile}`)
+checkDirExists(dataDir)
 checkForOldFiles(dataDir)
+
 
 readFileAsync(listFile, 'UTF-8')
     .then(content => {
@@ -123,15 +125,33 @@ function checkForOldFiles(dir) {
     }
     let oldFileCount = 0;
     files.forEach(file => {
+        if (!/.html$/.test(file)) {
+            return
+        }
         const fileDate = getFileModifiedTime(dir + '/' + file)
-        if (isToday(fileDate)) {
+        if (!isToday(fileDate)) {
             oldFileCount++
         }
     })
+    if (oldFileCount) {
+        console.log(`${dir} contains ${oldFileCount} out of date files`)
+        console.log("You should probably delete them before continuing!")
+    }
+}
 
-    console.log(`${dir} contains ${oldFileCount} out of date files`)
-    console.log("You should probably delete them before continuing!")
-    // askQuestion("Press any key to continue")
+function checkDirExists(dataDir) {
+    try {
+        if (fs.existsSync(dataDir) && fs.lstatSync(dataDir).isDirectory()) {
+            // console.log(`${dataDir} exists, good!`)
+        } else {
+            console.log(`${dataDir} does not exist, creating it`)
+            fs.mkdirSync(dataDir, { recursive: true });
+        }
+    }
+    catch (err) {
+        console.log(err)
+    }
+
 }
 
 function isToday(someDate) {
