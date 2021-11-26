@@ -1,7 +1,7 @@
 {
-  "name": "RHRA Database Scraper",
+  "name": "rhra-database-scraper",
   "version": "1.0.0",
-  "description": "Scripts to grab database of homes from Retirement Homes Regulatory Authority website, and save as CSV file",
+  "description": "Scripts to grab database of homes from Retirement Homes Regulatory Authority (RHRA) website, and save as CSV file",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
