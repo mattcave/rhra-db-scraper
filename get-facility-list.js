@@ -12,14 +12,30 @@ const requestTimeout = Number(process.env.requestTimeout) || 10000
 const listFile = process.env.listFile || './list.json'
 
 
-const fileDate = getFileModifiedTime(listFile)
 
-if (isToday(fileDate)) {
-    console.log("Facility list is up to date")
-} else {
-    console.log(`Grabbing fresh ${listFile}`)
+
+
+try {
+    if (fs.existsSync(listFile)) {
+        //file exists
+        const fileDate = getFileModifiedTime(listFile)
+        if (isToday(fileDate)) {
+            console.log("Facility list is up to date")
+        } else {
+            console.log("Facility list is old, let\'s fetch a new one")
+            fetchList('https://www.rhra.ca/wp-admin/admin-ajax.php?action=public_register&language=en')
+        }
+    } else {
+        console.log('No existing Facility list exists, let\'s fetch one')
+        fetchList('https://www.rhra.ca/wp-admin/admin-ajax.php?action=public_register&language=en')
+    }
+} catch(err) {
+    console.log('Error accessing existing Facility file, let\'s try to fetch a new one')
     fetchList('https://www.rhra.ca/wp-admin/admin-ajax.php?action=public_register&language=en')
 }
+
+
+
 
 function getFileModifiedTime(filename) {
     let timestamp;
@@ -27,7 +43,7 @@ function getFileModifiedTime(filename) {
         timestamp = fs.statSync(filename).mtime
     }
     catch(err) {
-        console.log(`${filename} does not exist`)
+        // console.log(`${filename} does not exist`)
         timestamp = new Date(0);
     }
     return timestamp;
@@ -53,11 +69,11 @@ function fetchList(url) {
                     return
                 }
             })
-            console.log("List written successfully")
+            console.log("Facility list written successfully")
         })
         .catch(err => {
             console.error (err)
-            console.log(`Couldn't get list`)
+            console.log(`Couldn't get Facility list`)
         })
 }
 
